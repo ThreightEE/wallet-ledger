@@ -1,11 +1,19 @@
-# Digital Wallet Ledger
+# FinTech Digital Wallet Ledger
 Database architecture for multi-currency digital wallet ecosystem
 
 **Author:** Daiana Tei
 
-## System Overview
+## Overview
 A relational PostgreSQL database architecture for a multi-currency digital wallet.
 It enables users to create multi-currency wallets, track income and expenses, and enforce data consistency using ACID-compliant stored procedures.
+
+**Documentation:**
+See DesignDocument.pdf.
+
+## Technical Stack
+* **Database:** PostgreSQL 15
+* **Logic:** PL/pgSQL (Stored Procedures)
+* **Infrastructure:** Docker & Docker Compose
 
 ## Entity-Relationship Architecture (UML)
 
@@ -18,12 +26,7 @@ Contains maximum limits and current balance.
 
 ![Database Schema UML](public.png)
 
-## Technical Stack
-* **Database:** PostgreSQL 15
-* **Logic:** PL/pgSQL (Stored Procedures)
-* **Infrastructure:** Docker & Docker Compose
-
-## Functional Requirements & Constraints
+## Functional Requirements
 
 1. **Financial Data Integrity:**
    
@@ -42,11 +45,6 @@ Contains maximum limits and current balance.
    To prevent Time-Of-Check to Time-Of-Use race conditions from the application layer, state-mutating operations are pushed down to the database.
    The `add_new_operation` procedure atomically validates overdrafts, updates the wallet balance, and inserts the ledger log in a single, isolated transaction.
 
-## Project Structure
-* `docker-compose.yml`: Provisions the isolated PostgreSQL environment.
-* `scripts/create_tables.sql`: The Data Definition Language defining the normalized 3NF schema.
-* `scripts/dml.sql`: Data Manipulation Language containing mock data seeding, analytical time-series queries, and the core Stored Procedures.
-
 ## Quick Start
 1. Start the database container:
    ```bash
@@ -54,6 +52,12 @@ Contains maximum limits and current balance.
    ```
 2. Connect to the database via your preferred SQL client on `localhost:5432` using `postgres` / `password`.
 3. Execute `scripts/create_tables.sql` followed by `scripts/dml.sql` to seed the database and compile the procedures.
+
+## Project Structure
+* `docker-compose.yml`: Provisions the isolated PostgreSQL environment.
+* `scripts/create_tables.sql`: The Data Definition Language defining the normalized 3NF schema.
+* `scripts/dml.sql`: Data Manipulation Language containing mock data seeding, analytical time-series queries, and the core Stored Procedures.
+* `DesignDocument.pdf`: Documentation
 
 ## Stored Procedures
 
